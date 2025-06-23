@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - E-Library</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #6200ea;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #6200ea;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .book-list {
+            margin-top: 2rem;
+        }
+
+        .book-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-item img {
+            max-height: 60px;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+
+        .book-item a {
+            text-decoration: none;
+            color: #6200ea;
+            font-weight: bold;
+            background: #f0eaff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .book-item a:hover {
+            background-color: #6200ea;
+            color: #fff;
+        }
+
+        .delete-button {
+            background: #e53935;
+            color: #fff;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <form id="add-book-form">
+            <div class="form-group">
+                <label for="book-title">Book Title</label>
+                <input type="text" id="book-title" placeholder="Enter book title" required>
+            </div>
+            <div class="form-group">
+                <label for="book-author">Author</label>
+                <input type="text" id="book-author" placeholder="Enter author name" required>
+            </div>
+            <div class="form-group">
+                <label for="book-file">Book File (PDF, Word, or URL)</label>
+                <input type="file" id="book-file" accept=".pdf,.doc,.docx">
+                <input type="url" id="book-url" placeholder="Enter book URL (optional)">
+            </div>
+            <div class="form-group">
+                <label for="book-image">Book Image</label>
+                <input type="file" id="book-image" accept="image/jpeg,image/png" required>
+            </div>
+            <button type="submit">Add Book</button>
+        </form>
+
+        <div class="book-list" id="book-list">
+            <h2>Books</h2>
+        </div>
+    </div>
+
+    <script>
+        const addBookForm = document.getElementById('add-book-form');
+        const bookList = document.getElementById('book-list');
+    
+        // Function to retrieve books from localStorage
+        function getBooks() {
+            return JSON.parse(localStorage.getItem('books')) || [];
+        }
+    
+        // Function to save books to localStorage
+        function saveBooks(books) {
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+    
+        // Function to display books in the book list
+        function renderBooks() {
+            const books = getBooks();
+            bookList.innerHTML = '<h2>Books</h2>';
+    
+            books.forEach((book, index) => {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.innerHTML = `
+                    <img src="${book.image}" alt="Book Cover">
+                    <div>
+                        <a href="${book.link}" target="_blank">${book.title}</a> by ${book.author}
+                    </div>
+                    <button class="delete-button" data-index="${index}">Delete</button>
+                `;
+                bookList.appendChild(bookItem);
+            });
+        }
+    
+        // Event listener for the form submission
+        addBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+    
+            // Retrieve form data
+            const title = document.getElementById('book-title').value.trim();
+            const author = document.getElementById('book-author').value.trim();
+            const fileInput = document.getElementById('book-file');
+            const urlInput = document.getElementById('book-url').value.trim();
+            const imageInput = document.getElementById('book-image');
+    
+            // Validate inputs
+            if (!title || !author) {
+                alert("Please provide both a title and an author.");
+                return;
+            }
+    
+            if (!fileInput.files.length && !urlInput) {
+                alert("Please provide either a book file or a URL.");
+                return;
+            }
+    
+            if (!imageInput.files.length) {
+                alert("Please provide a book cover image.");
+                return;
+            }
+    
+            const books = getBooks();
+    
+            // Handle file or URL input
+            const processBookLink = (callback) => {
+                if (fileInput.files.length > 0) {
+                    const fileReader = new FileReader();
+                    fileReader.onload = (event) => callback(event.target.result);
+                    fileReader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    callback(urlInput);
+                }
+            };
+    
+            // Handle book image upload
+            const processImage = (callback) => {
+                const imageReader = new FileReader();
+                imageReader.onload = (event) => callback(event.target.result);
+                imageReader.readAsDataURL(imageInput.files[0]);
+            };
+    
+            // Process inputs and save book
+            processBookLink((bookLink) => {
+                processImage((imageLink) => {
+                    books.push({ title, author, link: bookLink, image: imageLink });
+                    saveBooks(books);
+                    renderBooks();
+                    addBookForm.reset();
+                });
+            });
+        });
+    
+        // Event listener for deleting books
+        bookList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-button')) {
+                const index = e.target.dataset.index;
+                const books = getBooks();
+                books.splice(index, 1);
+                saveBooks(books);
+                renderBooks();
+            }
+        });
+    
+        // Initialize the book list on page load
+        document.addEventListener('DOMContentLoaded', renderBooks);
+    </script>
+    
+</body>
+</html>

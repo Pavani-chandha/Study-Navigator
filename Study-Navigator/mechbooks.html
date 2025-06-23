@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Navigator - CSE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-image: url('/api/placeholder/1600/900');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: relative;
+      }
+      
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(245, 245, 245, 0.85);
+        z-index: -1;
+      }
+      
+      /* Header with the gradient style */
+      header {
+        background: linear-gradient(135deg, #3498db, #8e44ad);
+        color: white;
+        padding: 20px;
+        margin: 0;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      
+      header h1 {
+        font-size: 36px;
+        margin: 0 0 10px 0;
+        letter-spacing: 1px;
+      }
+      
+      header p {
+        font-size: 18px;
+        margin: 0;
+        opacity: 0.9;
+      }
+      
+      /* Logout button */
+      .logout-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        padding-right: 30px;
+      }
+      
+      .logout-button {
+        display: inline-block;
+        padding: 12px 25px;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      .logout-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+      }
+      
+      .main-content {
+        padding: 30px;
+        width: 95%;
+        max-width: 1800px;
+        margin: 0 auto;
+      }
+      
+      .department-title {
+        color: #8e44ad;
+        margin-top: 20px;
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 50px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Force single row layout */
+      .year-cards {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: nowrap; /* Prevent wrapping to ensure single row */
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scrolling if needed */
+        padding-bottom: 20px; /* Space for potential scrollbar */
+      }
+      
+      .year-card {
+        width: 22%;
+        min-width: 240px;
+        height: 300px; /* Reduced height */
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        background-color: white;
+        flex-shrink: 0; /* Prevent cards from shrinking */
+        cursor: pointer; /* Show pointer cursor to indicate clickable */
+      }
+      
+      .year-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+      
+      /* Container that holds both image and content */
+      .card-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      .year-card-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      
+      /* Image blend with background */
+      .year-card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0.3; /* Make image more transparent */
+        filter: brightness(1.5) contrast(0.8); /* Adjust image to blend better */
+      }
+      
+      /* First year card styling - light blue */
+      .year-card.first-year .year-card-content {
+        background: linear-gradient(135deg, rgba(173, 216, 230, 0.8), rgba(135, 206, 250, 0.7));
+      }
+      
+      /* Second year card styling - light green */
+      .year-card.second-year .year-card-content {
+        background: linear-gradient(135deg, rgba(144, 238, 144, 0.8), rgba(127, 255, 212, 0.7));
+      }
+      
+      /* Third year card styling - light orange */
+      .year-card.third-year .year-card-content {
+        background: linear-gradient(135deg, rgba(255, 218, 185, 0.8), rgba(255, 192, 203, 0.7));
+      }
+      
+      /* Fourth year card styling - light purple */
+      .year-card.fourth-year .year-card-content {
+        background: linear-gradient(135deg, rgba(216, 191, 216, 0.8), rgba(221, 160, 221, 0.7));
+      }
+      
+      /* Widget as button */
+      .year-card-content {
+        position: relative;
+        z-index: 2;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7); /* Default fallback */
+        transition: all 0.3s ease;
+      }
+      
+      /* Button effect on hover */
+      .year-card:hover .year-card-content {
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+      
+      /* Full clickable area */
+      .card-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        text-decoration: none;
+      }
+      
+      .year-card-title {
+        font-size: 36px;
+        font-weight: bold;
+        color: #fff;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      
+      /* Title effect on hover */
+      .year-card:hover .year-card-title {
+        transform: scale(1.1);
+      }
+      
+      /* Button feedback */
+      .year-card:active {
+        transform: scale(0.98);
+      }
+      
+      /* Make sure it works on mobile too */
+      @media (max-width: 1200px) {
+        .year-cards {
+          flex-wrap: wrap;
+        }
+        .year-card {
+          width: 45%;
+          margin-bottom: 30px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .year-card {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with your requested content -->
+    <header>
+        <h1>Study Navigator</h1>
+        <p>Your gateway to academic resources and materials</p>
+    </header>
+    
+    <!-- Logout Button below the header -->
+    <div class="logout-container">
+      <a href="logout.php" class="logout-button">Logout</a>
+    </div>
+    
+    <div class="main-content">
+      <h2 class="department-title">Mechanical Engineering</h2>
+      
+      <div class="year-cards">
+        <!-- First Year Card -->
+        <div class="year-card first-year">
+          <div class="card-container">
+            <div class="year-card-image">
+              <img src="https://pngimg.com/d/student_PNG62555.png" alt="First Year Student">
+            </div>
+            <div class="year-card-content">
+              <div class="year-card-title">I Year</div>
+            </div>
+            <a href="cse1str19.html" class="card-link" aria-label="Explore First Year"></a>
+          </div>
+        </div>
+        
+        <!-- Second Year Card with AI chip image -->
+        <div class="year-card second-year">
+          <div class="card-container">
+            <div class="year-card-image">
+              <img src="https://static.vecteezy.com/system/resources/previews/021/820/175/non_2x/computer-chip-with-ai-letters-3d-artificial-intelligence-icon-png.png" alt="AI Chip Technology">
+            </div>
+            <div class="year-card-content">
+              <div class="year-card-title">II Year</div>
+            </div>
+            <a href=".html" class="card-link" aria-label="Explore Second Year"></a>
+          </div>
+        </div>
+        
+        <!-- Third Year Card with tech equipment image -->
+        <div class="year-card third-year">
+          <div class="card-container">
+            <div class="year-card-image">
+              <img src="https://www.pngall.com/wp-content/uploads/13/Tech-PNG-Cutout.png" alt="Tech Equipment">
+            </div>
+            <div class="year-card-content">
+              <div class="year-card-title">III Year</div>
+            </div>
+            <a href=".html" class="card-link" aria-label="Explore Third Year"></a>
+          </div>
+        </div>
+        
+        <!-- Fourth Year Card with student alumni image -->
+        <div class="year-card fourth-year">
+          <div class="card-container">
+            <div class="year-card-image">
+              <img src="https://rtuoffice.sumsraj.com/img/student_alumini_img.png" alt="Student Alumni">
+            </div>
+            <div class="year-card-content">
+              <div class="year-card-title">IV Year</div>
+            </div>
+            <a href=".html" class="card-link" aria-label="Explore Fourth Year"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

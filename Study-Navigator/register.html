@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="registerUser(event)">
+    <h2>Register</h2>
+    <input type="text" id="fName" placeholder="First Name" required />
+    <input type="text" id="lName" placeholder="Last Name" required />
+    <input type="email" id="email" placeholder="College Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <input type="submit" value="Register" />
+    <div class="error" id="errorMsg"></div>
+  </form>
+
+  <script>
+    function validateEmail(email) {
+      const pattern = /^(1[0-9]|[2-9][0-9])4g1a(05|06|04|02|03|32|33)([0-9]{2}|[a-g][1-9])@srit\\.ac\\.in$/;
+      return pattern.test(email);
+    }
+
+    function validatePassword(password) {
+      const pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W_]).{8,}$/;
+      return pattern.test(password);
+    }
+
+    function registerUser(event) {
+      event.preventDefault();
+
+      const fName = document.getElementById('fName').value;
+      const lName = document.getElementById('lName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const name = `${fName} ${lName}`;
+      const errorMsg = document.getElementById('errorMsg');
+
+      if (!validateEmail(email)) {
+        errorMsg.textContent = "Invalid SRIT college email format.";
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        errorMsg.textContent = "Password must be 8+ characters with uppercase, lowercase, number & symbol.";
+        return;
+      }
+
+      fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("✅ Registered successfully!");
+          window.location.href = 'index.html';
+        } else {
+          errorMsg.textContent = data.message || "❌ Registration failed. Try a different email.";
+        }
+      })
+      .catch(() => {
+        errorMsg.textContent = "⚠️ Server error. Try again later.";
+      });
+    }
+  </script>
+</body>
+</html>

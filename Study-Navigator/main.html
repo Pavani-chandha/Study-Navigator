@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Navigator</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: -1;
+        }
+
+        header {
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 42px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        /* Styling for widgets container */
+        .widgets-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 60px auto;
+            max-width: 1200px;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        /* Individual widget styling */
+        .widget {
+            border-radius: 15px;
+            width: 400px;
+            min-height: 450px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .widget:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Books widget specific styling */
+        .books-widget {
+            background: linear-gradient(135deg, #3498db, #1abc9c);
+        }
+
+        .books-widget-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .books-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://png.pngtree.com/png-clipart/20231003/original/pngtree-children-reading-book-png-image_13235055.png');
+            background-size: 80%;
+            background-position: bottom right;
+            background-repeat: no-repeat;
+            opacity: 0.25;
+            z-index: 1;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .books-widget:hover::before {
+            opacity: 0.35;
+            transform: scale(1.05);
+        }
+
+        /* Papers widget specific styling */
+        .papers-widget {
+            background: linear-gradient(135deg, #e74c3c, #e67e22);
+        }
+
+        .papers-widget-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .papers-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 1;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .papers-widget:hover::before {
+            opacity: 0.25;
+            transform: scale(1.05);
+        }
+
+        .widget-icon {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .widget-icon img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .widget:hover .widget-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .widget h2 {
+            color: white;
+            margin: 0 0 15px;
+            font-size: 28px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .widget h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .widget p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Widget button styling */
+        .widget button {
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50px;
+            background-color: white;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .books-widget button {
+            color: #3498db;
+        }
+
+        .papers-widget button {
+            color: #e74c3c;
+        }
+
+        .widget button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: all 0.4s;
+            z-index: -1;
+        }
+
+        .books-widget button::before {
+            background: linear-gradient(to right, #3498db, #1abc9c);
+        }
+
+        .papers-widget button::before {
+            background: linear-gradient(to right, #e74c3c, #e67e22);
+        }
+
+        .widget button:hover {
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .widget button:hover::before {
+            left: 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .widgets-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .widget {
+                width: 100%;
+                max-width: 450px;
+                margin-bottom: 20px;
+            }
+            
+            header h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Study Navigator</h1>
+        <p>Your gateway to academic resources and materials</p>
+    </header>
+
+    <!-- Widgets Container -->
+    <div class="widgets-container">
+        <div class="widget books-widget">
+            <div class="books-widget-content">
+                <div class="widget-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="Books Icon">
+                </div>
+                <h2>Books</h2>
+                <p>Access textbooks and reference materials for all courses. Find comprehensive study materials organized by semester and subject.</p>
+                <button onclick="location.href='sritregulations.html'">View Books</button>
+            </div>
+        </div>
+        <div class="widget papers-widget">
+            <div class="papers-widget-content">
+                <div class="widget-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4300/4300059.png" alt="Papers Icon">
+                </div>
+                <h2>Previous Question Papers</h2>
+                <p>Download and practice from past question papers. Improve your exam preparation with authentic previous year papers.</p>
+                <button onclick="location.href='papersregualtions.html'">View Papers</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

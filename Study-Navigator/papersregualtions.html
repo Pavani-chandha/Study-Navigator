@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Navigator - Regulations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.pexels.com/photos/2041540/pexels-photo-2041540.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* Header section - reduced height and font size */
+        header {
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            padding: 15px 20px; /* Reduced padding */
+            margin: 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2rem; /* Smaller font size */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            margin: 5px 0 0; /* Reduced margin */
+            font-size: 1rem; /* Smaller font size */
+            opacity: 0.9;
+        }
+
+        /* Main content container */
+        .content-container {
+            max-width: 1400px;
+            margin: 40px auto; /* Reduced top margin */
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        /* Regulation card styles */
+        .regulation-card {
+            width: 400px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .regulation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .regulation-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .regulation-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+            z-index: 1;
+        }
+
+        .regulation-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .regulation-card:hover .regulation-image img {
+            transform: scale(1.1);
+        }
+
+        .regulation-content {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .regulation-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin: 0 0 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .regulation-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, #9b59b6);
+            margin: 10px auto 0;
+        }
+
+        .regulation-description {
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .regulation-button {
+            background: linear-gradient(to right, #2980b9, #3498db);
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 80%;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .regulation-button:hover {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer style */
+        footer {
+            text-align: center;
+            padding: 15px; /* Reduced padding */
+            background-color: rgba(52, 73, 94, 0.9);
+            color: white;
+            margin-top: 40px; /* Reduced margin */
+            backdrop-filter: blur(10px);
+        }
+        
+        footer p {
+            margin: 0;
+            font-size: 0.9rem; /* Smaller font size */
+        }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .content-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .regulation-card {
+                width: 100%;
+                max-width: 450px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            header p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - reduced height and font size -->
+    <header>
+        <h1>Study Navigator</h1>
+        <p>Your gateway to academic resources and materials</p>
+    </header>
+
+    <!-- Main Content Container with Regulation Cards -->
+    <div class="content-container">
+        <!-- Regulation R19 Card -->
+        <div class="regulation-card">
+            <div class="regulation-image">
+                <img src="https://images.pexels.com/photos/3769714/pexels-photo-3769714.jpeg" alt="R19 Regulations">
+            </div>
+            <div class="regulation-content">
+                <h2 class="regulation-title">Regulation R19</h2>
+                <p class="regulation-description">Academic curriculum and examination rules for students admitted in 2019-20 batch. Covers course structure, evaluation methods, and graduation requirements.</p>
+                <a href="regualtions.html" class="regulation-button">View Details</a>
+            </div>
+        </div>
+
+        <!-- Regulation R20 Card -->
+        <div class="regulation-card">
+            <div class="regulation-image">
+                <img src="https://images.pexels.com/photos/4144101/pexels-photo-4144101.jpeg" alt="R20 Regulations">
+            </div>
+            <div class="regulation-content">
+                <h2 class="regulation-title">Regulation R20</h2>
+                <p class="regulation-description">Academic curriculum and examination rules for students admitted in 2020-21 batch. Includes updated syllabus and new elective courses.</p>
+                <a href="regulations1.html" class="regulation-button">View Details</a>
+            </div>
+        </div>
+
+        <!-- Regulation R23 Card -->
+        <div class="regulation-card">
+            <div class="regulation-image">
+                <img src="https://images.pexels.com/photos/5428146/pexels-photo-5428146.jpeg" alt="R23 Regulations">
+            </div>
+            <div class="regulation-content">
+                <h2 class="regulation-title">Regulation R23</h2>
+                <p class="regulation-description">Latest academic curriculum and examination rules for students admitted in 2023-24 batch. Features industry-aligned courses and flexible credit system.</p>
+                <a href="regulations2.html" class="regulation-button">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Study Navigator. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>.

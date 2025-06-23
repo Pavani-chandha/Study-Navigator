@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Navigator - Departments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+      /* General styles */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e8f0ff; /* Lighter background color */
+        color: #333;
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+      }
+
+      /* Background image with overlay - MODIFIED for full coverage */
+      body:before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://static.vecteezy.com/system/resources/previews/013/083/736/original/stick-man-with-book-shelves-in-library-education-and-learning-concept-3d-illustration-or-3d-rendering-png.png');
+        background-size: cover; /* Changed from 'contain' to 'cover' */
+        background-position: center; /* Changed from 'right bottom' to 'center' */
+        background-repeat: no-repeat;
+        opacity: 0.15;
+        z-index: -1;
+      }
+
+      /* Fixed header style */
+      header {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(142, 68, 173, 0.9));
+        color: white;
+        padding: 20px;
+        margin: 0;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+      }
+      
+      header h1 {
+        margin: 0;
+        font-size: 2.2rem;
+      }
+      
+      header p {
+        margin: 10px 0 0;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      /* Main container with padding to account for fixed header */
+      .container {
+        max-width: 1200px;
+        margin: 120px auto 40px; /* Added top margin to account for fixed header */
+        padding: 0 20px;
+        position: relative;
+      }
+
+      .section-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Carousel container */
+      .carousel-container {
+        position: relative;
+        overflow: hidden; /* Hide overflow */
+        padding: 0 80px;
+      }
+
+      /* Department cards container */
+      .department-cards {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 30px;
+      }
+      
+      /* Department card style */
+      .department-card {
+        flex: 0 0 calc(33.33% - 20px);
+        min-width: 300px;
+        height: 500px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+        position: relative;
+        cursor: pointer; /* Add cursor pointer to indicate clickable */
+      }
+      
+      .department-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Card background overlays with department-specific colors */
+      .cse:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(142, 68, 173, 0.8) 0%, rgba(89, 42, 107, 0.95) 100%);
+        z-index: 1;
+      }
+      
+      .ece:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(231, 76, 60, 0.8) 0%, rgba(148, 49, 38, 0.95) 100%);
+        z-index: 1;
+      }
+      
+      .eee:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(46, 204, 113, 0.8) 0%, rgba(27, 128, 69, 0.95) 100%);
+        z-index: 1;
+      }
+      
+      .civil:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(52, 152, 219, 0.8) 0%, rgba(31, 97, 141, 0.95) 100%);
+        z-index: 1;
+      }
+      
+      .mech:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(230, 126, 34, 0.8) 0%, rgba(153, 84, 22, 0.95) 100%);
+        z-index: 1;
+      }
+      
+      /* Card image container */
+      .card-image {
+        height: 280px;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.5s ease;
+        opacity: 0.9;
+        mix-blend-mode: screen;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .department-card:hover .card-image img {
+        transform: scale(1.08);
+      }
+      
+      /* Card content */
+      .card-content {
+        padding: 25px;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 280px - 50px);
+        justify-content: space-between;
+      }
+      
+      .card-title {
+        color: white;
+        font-size: 1.6rem;
+        margin: 0 0 15px 0;
+        text-align: center;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+      
+      .card-title:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.7);
+      }
+      
+      .card-description {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+      
+      /* Enhanced view button */
+      .view-button {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        text-align: center;
+        padding: 14px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .view-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      }
+      
+      .view-button i {
+        margin-left: 8px;
+      }
+
+      /* Improved Navigation arrows with more space */
+      .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        background-color: rgba(70, 130, 180, 0.8);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      
+      .carousel-btn.prev {
+        left: 0;
+      }
+      
+      .carousel-btn.next {
+        right: 0;
+      }
+      
+      .carousel-btn:hover {
+        background-color: rgba(70, 130, 180, 0.9);
+        transform: translateY(-50%) scale(1.1);
+      }
+      
+      .carousel-btn i {
+        font-size: 1.8rem;
+        color: white;
+      }
+      
+      /* Carousel indicators */
+      .carousel-indicators {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      
+      .indicator {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: rgba(70, 130, 180, 0.4);
+        margin: 0 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+      
+      .indicator.active {
+        background-color: rgba(70, 130, 180, 0.9);
+        transform: scale(1.2);
+      }
+      
+      /* Responsive layout */
+      @media screen and (max-width: 992px) {
+        .department-card {
+          flex: 0 0 calc(50% - 15px);
+          height: 420px;
+        }
+        .carousel-container {
+          padding: 0 70px;
+        }
+      }
+      
+      @media screen and (max-width: 768px) {
+        .department-card {
+          flex: 0 0 100%;
+          height: 400px;
+        }
+        .carousel-container {
+          padding: 0 60px;
+        }
+        header h1 {
+          font-size: 1.8rem;
+        }
+        header p {
+          font-size: 1rem;
+        }
+        .container {
+          margin-top: 100px; /* Smaller top margin on mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>Study Navigator</h1>
+      <p>Your gateway to academic resources and materials</p>
+    </header>
+
+    <!-- Main container -->
+    <div class="container">
+      <h2 class="section-title">Departments</h2>
+      
+      <!-- Carousel container -->
+      <div class="carousel-container">
+        <!-- Previous button -->
+        <div class="carousel-btn prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <!-- Department cards container -->
+        <div class="department-cards">
+          <!-- Computer Science card -->
+          <div class="department-card cse">
+            <div class="card-image">
+              <img src="https://static.vecteezy.com/system/resources/previews/020/962/925/original/software-engineer-graphic-clipart-design-free-png.png" alt="Computer Science & Engineering">
+            </div>
+            <div class="card-content">
+              <div>
+                <h3 class="card-title">Computer Science & Engineering</h3>
+                <p class="card-description">Explore cutting-edge computing technologies, programming languages, and software engineering principles.</p><br>
+              </div>
+              <div class="view-button">View Details <i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+          
+          <!-- Electronics card -->
+          <div class="department-card ece">
+            <div class="card-image">
+              <img src="https://png.pngtree.com/png-vector/20241106/ourmid/pngtree-electronic-circuit-futuristic-neon-motherboard-on-transparent-background-png-image_14291854.png" alt="Electronics Communications and Engineering">
+            </div>
+            <div class="card-content">
+              <div>
+                <h3 class="card-title">Electronics Communications and Engineering</h3>
+                <p class="card-description">Study electronic circuits, communication systems, signal processing, and telecommunications.</p><br>
+              </div>
+              <div class="view-button">View Details <i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+          
+          <!-- Electrical card -->
+          <div class="department-card eee">
+            <div class="card-image">
+              <img src="https://webstockreview.net/images/electrical-clipart-cartoon-3.png" alt="Electrical & Electronics Engineering">
+            </div>
+            <div class="card-content">
+              <div>
+                <h3 class="card-title">Electrical & Electronics</h3>
+                <p class="card-description">Learn about power systems, electrical machines, control systems, and energy conversion.</p><br>
+              </div>
+              <div class="view-button">View Details <i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+          
+          <!-- Civil card -->
+          <div class="department-card civil">
+            <div class="card-image">
+              <img src="https://www.pngplay.com/wp-content/uploads/13/Civil-Engineering-Transparent-Background.png" alt="Civil Engineering">
+            </div>
+            <div class="card-content">
+              <div>
+                <h3 class="card-title">Civil Engineering</h3>
+                <p class="card-description">Focus on structural engineering, construction materials, transportation, and environmental systems.</p><br>
+              </div><br><br><Br><BR><BR>
+              <div class="view-button">View Details <i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+          
+          <!-- Mechanical card -->
+          <div class="department-card mech">
+            <div class="card-image">
+              <img src="http://www.pngmart.com/files/16/Industrial-Engineer-PNG-Image.png" alt="Mechanical Engineering">
+            </div>
+            <div class="card-content">
+              <div>
+                <h3 class="card-title">Mechanical Engineering</h3>
+                <p class="card-description">Study thermodynamics, mechanics, manufacturing processes, and machine design principles.</p><br>
+              </div>
+              <div class="view-button">View Details <i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Next button -->
+        <div class="carousel-btn next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <!-- Carousel indicators -->
+      <div class="carousel-indicators">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+      </div>
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get elements
+        const cardsContainer = document.querySelector('.department-cards');
+        const cards = document.querySelectorAll('.department-card');
+        const prevBtn = document.querySelector('.carousel-btn.prev');
+        const nextBtn = document.querySelector('.carousel-btn.next');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        // Set initial state
+        let currentIndex = 0;
+        let cardsPerView = getCardsPerView();
+        let totalSlides = Math.ceil(cards.length / cardsPerView);
+        
+        // Update on window resize
+        window.addEventListener('resize', function() {
+          cardsPerView = getCardsPerView();
+          totalSlides = Math.ceil(cards.length / cardsPerView);
+          goToSlide(currentIndex);
+        });
+        
+        // Function to get cards per view based on screen size
+        function getCardsPerView() {
+          if (window.innerWidth <= 768) return 1;
+          if (window.innerWidth <= 992) return 2;
+          return 3;
+        }
+        
+        // Function to navigate to a specific slide
+        function goToSlide(index) {
+          if (index < 0) index = 0;
+          if (index >= totalSlides) index = totalSlides - 1;
+          
+          currentIndex = index;
+          
+          // Calculate the translate value
+          const cardWidth = cards[0].offsetWidth;
+          const gapWidth = 30; // Same as the gap in CSS
+          const translateX = -index * (cardsPerView * (cardWidth + gapWidth));
+          
+          // Apply the transform
+          cardsContainer.style.transform = `translateX(${translateX}px)`;
+          
+          // Update indicators
+          indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === currentIndex);
+          });
+          
+          // Show/hide navigation buttons
+          prevBtn.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+          nextBtn.style.visibility = currentIndex === totalSlides - 1 ? 'hidden' : 'visible';
+        }
+        
+        // Event listeners for buttons
+        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+        
+        // Event listeners for indicators
+        indicators.forEach((indicator, i) => {
+          indicator.addEventListener('click', () => goToSlide(i));
+        });
+        
+        // Add click event to each department card with specific destination pages
+        cards.forEach(card => {
+          card.addEventListener('click', function() {
+            // Check which department was clicked by class name
+            if (card.classList.contains('cse')) {
+              window.location.href = 'yearsbooks.html';
+            } else if (card.classList.contains('ece')) {
+              window.location.href = 'Ece1.html';
+            } else if (card.classList.contains('eee')) {
+              window.location.href = 'eee (1).html';
+            } else if (card.classList.contains('civil')) {
+              window.location.href = 'ce1.html';
+            } else if (card.classList.contains('mech')) {
+              window.location.href = 'mech1.html';
+            }
+          });
+        });
+        
+        // Initialize
+        goToSlide(0);
+      });
+    </script>
+  </body>
+</html>

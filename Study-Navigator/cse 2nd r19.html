@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - E-Library</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: #6200ea;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-bar input {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 0.5rem;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background: #6200ea;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background: #3700b3;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .book {
+            background: #e7e7e7;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .book img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .book .hover-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+
+        .book:hover .hover-image {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        #contact {
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #contact h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #contact form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #contact form label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+
+        #contact form input, #contact form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #contact form textarea {
+            resize: none;
+        }
+
+        #contact form button {
+            width: 100%;
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #contact form button:hover {
+            background-color: #3700b3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-Library</h1>
+    </header>
+
+    <section id="books">
+        <div class="container">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search for a book...">
+                <button id="search-button">Search</button>
+            </div>
+            <div class="books-grid" id="books-grid">
+                <div class="book" onclick="window.open('https://www.utstat.toronto.edu/mikevans/jeffrosenthal/book.pdf')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLMvbUxyICttPsjIg5cyXVPOTQZtyAsJVVpA&s" alt="Probability and Statistics">
+                    <h3>Probability and Statistics</h3>
+                </div>
+                <div class="book" onclick="window.open('https://scs.dypvp.edu.in/documents/e-books/DMBS/database-management-systems-raghu-ramakrishnan.pdf')">
+                    <img src="https://www.vikaspublishing.com/uploads/bookimages/vikas-books/9789325984370.jpg" alt="Database Management Systems">
+                    <h3>Database Management Systems</h3>
+                </div>
+                <div class="book" onclick="window.open('https://bharatskills.gov.in/pdf/E_Books/CTS/ES/English/ES_StudentWB_2ndYearW-NEW.pdf')">
+                    <img src="https://m.media-amazon.com/images/I/617gw5EBD3L._UF1000,1000_QL80_.jpg" alt="English Language and Employability Skills for Engineers">
+                    <h3>English Language and Employability Skills for Engineers</h3>
+                </div>
+                <div class="book" onclick="window.open('https://www.ms.sapientia.ro/~manyi/teaching/oop/oop_java.pdf')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqj2GgndKbuRhAl1JbYn5X5JaJ0frfZnCzdQ&s" alt="Object Oriented Programming with Java">
+                    <h3>Object Oriented Programming with Java</h3>
+                </div>
+                <div class="book" onclick="window.open('https://engineering.futureuniversity.com/BOOKS%20FOR%20IT/Software-Engineering-9th-Edition-by-Ian-Sommerville.pdf')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQepqgDhy5RUB_Td15vVzWmIddIT3-FYFYXJQ&s" alt="Software Engineering">
+                    <h3>Software Engineering</h3>
+                </div>
+                <div class="book" onclick="window.open('https://discrete.openmathbooks.org/pdfs/dmoi3-tablet.pdf')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTLaPpRIFi-BQC0d_06YPzXrOtX1KM8P8UJg&s" alt="Discrete Maths">
+                    <h3>Discrete Maths</h3>
+                </div>
+                <div class="book" onclick="window.open('https://fall14cs.wordpress.com/wp-content/uploads/2017/04/an-introduction-to-formal-languages-and-automata-5th-edition-2011.pdf')">
+                    <img src="https://media.springernature.com/full/springer-static/cover-hires/book/978-3-031-11965-1" alt="Formal Languages and Automata Theory">
+                    <h3>Formal Languages and Automata Theory</h3>
+                </div>
+                <div class="book" onclick="window.open('https://assets.openstax.org/oscms-prodcms/media/documents/Introduction_to_Python_Programming_-_WEB.pdf')">
+                    <img src="https://image.slidesharecdn.com/thepythonbooktheultimateguidetocodingwithpythonpdfdrive-220527060944-728dd1fe/85/The-Python-Book_-The-ultimate-guide-to-coding-with-Python-PDFDrive-pdf-1-320.jpg" alt="Python Programming">
+                    <h3>Python Programming</h3>
+                </div>
+                <div class="book" onclick="window.open('https://www.engrcs.com/courses/engr250/engr250lecture.pdf')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9UmYw8URlV7mj3_g2ubwrjpFBEGSFEhZRpQ&s" alt="Digital Logic Design">
+                    <h3>Digital Logic Design</h3>
+                </div>
+                <div class="book" onclick="window.open('https://courses.cs.duke.edu/fall08/cps230/Book.pdf')">
+                    <img src="https://www.drssridhar.com/wp-content/uploads/2021/03/daa.jpg" alt="Design and Analysis of Algorithms">
+                    <h3>Design and Analysis of Algorithms</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form action="https://formspree.io/f/xzzzypkk" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="_replyto" placeholder="Your Email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2025 E-Library. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const booksGrid = document.getElementById('books-grid');
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.toLowerCase();
+            const books = booksGrid.querySelectorAll('.book');
+
+            books.forEach(book => {
+                const title = book.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(query)) {
+                    book.style.display = '';
+                } else {
+                    book.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
